@@ -1,4 +1,5 @@
 node {
+   // warning: This whole thing is horribly sub-optimal and dirty
    
    // Pick a container that has maven, but based on Alpine, so that its small
    def mvnContainer = docker.image('jimschubert/8-jdk-alpine-mvn')
@@ -30,4 +31,7 @@ node {
           if [ "Hello World via Spring Boot" == "${response}" ]; then echo "SUCCESS"; else exit 1; fi;
       '''
    }
+   
+   stage 'Deploy'
+   
 }
