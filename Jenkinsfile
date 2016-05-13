@@ -1,16 +1,23 @@
 node {
-   stage 'Stage 1'
-   echo 'Hello World 1'
    
-   stage 'Stage 2'
-   echo 'Hello World 2'
+   // Pick a container that has maven, but based on Alpine, so that its small
+   def mvnContainer = docker.image('jimschubert/8-jdk-alpine-mvn')
    
-   stage 'Checkout'
+   stage 'Checkout from GitHub'
    git 'https://github.com/justincoffman/hello-world-sb.git'
    
+   state 'Verify container'
+   mvnContainer.inside {
+     sh 'mvn --version'
+   }
+   
    stage 'Build'
-   // Pick a container that has maven, but based on Alpine, so that its small
-   docker.image('jimschubert/8-jdk-alpine-mvn').inside {
-    sh 'mvn --version'
- }
+   mvnContainer.inside {
+     sh 'mvn compile'
+   }
+   
+   stage 'Test'
+   mvnContainer.inside {
+     sh 'mvn test'
+   }
 }
