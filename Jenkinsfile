@@ -26,7 +26,7 @@ node {
       sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
       sh 'sleep 10'
       sh '''
-          response=$(curl http://localhost:8080);'
+          response=$(curl http://localhost:8080);
           if [ "Hello World via Spring Boot" == "${response}" ]; then echo "SUCCESS"; else exit 1; fi;
       '''
    }
