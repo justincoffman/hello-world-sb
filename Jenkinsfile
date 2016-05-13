@@ -19,13 +19,7 @@ node {
    stage 'Integration Test'
    mvnContainer.inside {
      sh 'mvn install'
-     
-     // TODO: separate mvn install from java run/test
-     sh '''
-            apk --update add java curl
-          '''
-          
-     sh 'curl http://www.google.com'
+
      sh 'java --version'
    }
 }
