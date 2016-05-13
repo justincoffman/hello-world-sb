@@ -18,8 +18,7 @@ node {
    
    stage 'Integration Test'
    mvnContainer.inside {
-      sh 'apt-get -qq update'
-      sh 'apt-get -qq -y install curl'
+      sh 'apk add --update curl && rm -rf /var/cache/apk/*'
       
       sh 'mvn install'
 
