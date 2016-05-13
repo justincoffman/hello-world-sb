@@ -18,7 +18,7 @@ node {
    
    stage 'Integration Test'
    mvnContainer.inside {
-      sh 'apk add --update curl && rm -rf /var/cache/apk/*'
+      sh 'sudo apk add --update curl && sudo rm -rf /var/cache/apk/*'
       
       sh 'mvn install'
 
