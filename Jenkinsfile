@@ -11,13 +11,14 @@ node {
      sh 'mvn --version'
    }
    
-   stage 'Build'
-   mvnContainer.inside {
-     sh 'mvn compile'
-   }
-   
-   stage 'Test'
+   stage 'Build & Unit Test'
    mvnContainer.inside {
      sh 'mvn test'
+   }
+   
+   stage 'Integration Test'
+   mvnContainer.inside {
+     sh 'mvn install'
+     sh 'curl http://www.google.com'
    }
 }
