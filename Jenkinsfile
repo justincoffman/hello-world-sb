@@ -17,6 +17,7 @@ node {
    }
    
    stage 'Integration Test'
+   // Simple (stupid) test against running service
    mvnContainer.inside('-u root:root') {
       sh 'apk add --update curl && rm -rf /var/cache/apk/*'
       
@@ -24,6 +25,7 @@ node {
 
       sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
       sh 'sleep 10'
-      sh 'curl http://localhost:8080'
+      sh 'response=$(curl http://localhost:8080);'
+      sh 'if [ "Hello World via Spring Boot" == "${response}" ]; then echo "SUCCESS"; else exit 1; fi;'
    }
 }
