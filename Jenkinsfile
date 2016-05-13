@@ -18,8 +18,13 @@ node {
    
    stage 'Integration Test'
    mvnContainer.inside {
-     sh 'mvn install'
+      sh 'apt-get -qq update'
+      sh 'apt-get -qq -y install curl'
+      
+      sh 'mvn install'
 
-     sh 'java -jar target/gs-spring-boot-0.1.0.jar'
+      sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
+      sh 'sleep 10'
+      sh 'curl http://localhost:8080'
    }
 }
