@@ -27,8 +27,8 @@ node {
       sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
       sh 'sleep 10'
       sh '''
-          response=$(curl http://localhost:8080);
-          if [ "Hello World via Spring Boot" == "${response}" ]; then echo "SUCCESS"; else exit 1; fi;
+          #response=$(curl http://localhost:8080);
+          #if [ "Hello World via Spring Boot" == "${response}" ]; then echo "SUCCESS"; else exit 1; fi;
       '''
    }
    
@@ -43,7 +43,7 @@ node {
       sh 'sleep 10'
       sh '''
           responseTime=$(curl -s -w "%{time_total}\n" -o /dev/null http://localhost:8080);
-          echo "Reponse time was ${responseTime}"
+          #echo "Reponse time was ${responseTime}"
           #if [ 1.0 -gt "${responseTime}" ]; then echo "SUCCESS"; else exit 1; fi;
       '''
    }
