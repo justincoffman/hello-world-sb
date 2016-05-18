@@ -32,6 +32,24 @@ node {
       '''
    }
    
+   stage 'Performance Test'
+   // Simple (stupid) test against running service.
+   mvnContainer.inside('-u root:root') {
+      sh 'apk add --update curl && rm -rf /var/cache/apk/*'
+      
+      sh 'mvn install'
+
+      sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
+      sh 'sleep 10'
+      sh '''
+          responseTime=$(curl -s -w "%{time_total}\n" -o /dev/null http://localhost:8080);
+          echo "Reponse time was ${responseTime}"
+          if [ "1.0" -gt "${responseTime}" ]; then echo "SUCCESS"; else exit 1; fi;
+      '''
+   }
+   
+   
+   
    stage 'Deploy'
    
 }
