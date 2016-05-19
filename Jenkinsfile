@@ -17,8 +17,10 @@ node {
      sh 'mvn test'
    }
    
-   stage 'Tests'
-   parallel 'Integration Test': {
+   def testBranches = [:]
+   
+   testBranches[0] = {
+      stage 'Integration Test'
       node {
          // Simple (stupid) test against running service
          mvnContainer.inside('-u root:root') {
@@ -34,7 +36,10 @@ node {
             '''
          }
       }
-   }, 'performance': {
+   }
+   
+   testBranches[1] = {
+      stage 'Performance Test'
       node {
          // Simple (stupid) test against running service.
          mvnContainer.inside('-u root:root') {
@@ -52,6 +57,8 @@ node {
          }
       }
    }
+   
+   parallel testBranches
    
    
    
