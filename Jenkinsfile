@@ -19,7 +19,7 @@ node {
       
       sh 'mvn install'
 
-      sh 'java -jar target/gs-spring-boot-0.1.0.jar -Dserver.port=8090 &'
+      sh 'java -Dserver.port=8090 -jar target/gs-spring-boot-0.1.0.jar &'
       sh 'sleep 10'
       sh '''
           response=$(curl http://localhost:8090);
@@ -34,7 +34,7 @@ node {
       
       sh 'mvn install'
 
-      sh 'java -jar target/gs-spring-boot-0.1.0.jar -Dserver.port=8090 &'
+      sh 'java -Dserver.port=8090 -jar target/gs-spring-boot-0.1.0.jar &'
       sh 'sleep 10'
       sh '''
           responseTime=$(curl -s -w "%{time_total}\n" -o /dev/null http://localhost:8090);
