@@ -6,12 +6,7 @@ node {
    
    stage 'Checkout from GitHub'
    git 'https://github.com/justincoffman/hello-world-sb.git'
-   
-   stage 'Verify container'
-   mvnContainer.inside {
-     sh 'mvn --version'
-   }
-   
+
    stage 'Build & Unit Test'
    mvnContainer.inside {
      sh 'mvn test'
