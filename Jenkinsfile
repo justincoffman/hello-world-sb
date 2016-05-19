@@ -39,7 +39,7 @@ node {
       sh '''
           responseTime=$(curl -s -w "%{time_total}\n" -o /dev/null http://localhost:8090);
           echo "Reponse time was ${responseTime}"
-          if [ "1.0" -gt "${responseTime}" ]; then echo "SUCCESS"; else exit 1; fi;
+          if [ "1.0" > "${responseTime}" ]; then echo "SUCCESS"; else exit 1; fi;
       '''
    }
    
