@@ -17,35 +17,40 @@ node {
      sh 'mvn test'
    }
    
-   stage 'Integration Test'
-   // Simple (stupid) test against running service
-   mvnContainer.inside('-u root:root') {
-      sh 'apk add --update curl && rm -rf /var/cache/apk/*'
+   stage 'Tests'
+   parallel 'Integration Test': {
+      node {
+         // Simple (stupid) test against running service
+         mvnContainer.inside('-u root:root') {
+            sh 'apk add --update curl && rm -rf /var/cache/apk/*'
+            
+            sh 'mvn install'
       
-      sh 'mvn install'
-
-      sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
-      sh 'sleep 10'
-      sh '''
-          #response=$(curl http://localhost:8080);
-          #if [ "Hello World via Spring Boot" == "${response}" ]; then echo "SUCCESS"; else exit 1; fi;
-      '''
-   }
-   
-   stage 'Performance Test'
-   // Simple (stupid) test against running service.
-   mvnContainer.inside('-u root:root') {
-      sh 'apk add --update curl && rm -rf /var/cache/apk/*'
+            sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
+            sh 'sleep 10'
+            sh '''
+                #response=$(curl http://localhost:8080);
+                #if [ "Hello World via Spring Boot" == "${response}" ]; then echo "SUCCESS"; else exit 1; fi;
+            '''
+         }
+      }
+   }, 'performance': {
+      node {
+         // Simple (stupid) test against running service.
+         mvnContainer.inside('-u root:root') {
+            sh 'apk add --update curl && rm -rf /var/cache/apk/*'
+            
+            sh 'mvn install'
       
-      sh 'mvn install'
-
-      sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
-      sh 'sleep 10'
-      sh '''
-          responseTime=$(curl -s -w "%{time_total}\n" -o /dev/null http://localhost:8080);
-          #echo "Reponse time was ${responseTime}"
-          #if [ 1.0 -gt "${responseTime}" ]; then echo "SUCCESS"; else exit 1; fi;
-      '''
+            sh 'java -jar target/gs-spring-boot-0.1.0.jar &'
+            sh 'sleep 10'
+            sh '''
+                responseTime=$(curl -s -w "%{time_total}\n" -o /dev/null http://localhost:8080);
+                #echo "Reponse time was ${responseTime}"
+                #if [ 1.0 -gt "${responseTime}" ]; then echo "SUCCESS"; else exit 1; fi;
+            '''
+         }
+      }
    }
    
    
